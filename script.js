@@ -5,25 +5,25 @@ $(document).ready(function () {
         seconds: 00
     };
     let interval;
-    var userTime = {};
-    var sound = new Howl({
+    let userTime = {};
+    let sound = new Howl({
         src: ['sound.mp3']
     });
 
-    $(".settings").click(function (e) {
+    $(".settings").click((e) => {
         e.preventDefault();
         $("#minutes").attr("disabled") === undefined ? disableInput() : enableInput();
     });
 
-    function disableInput() {
+    const disableInput = () => {
         $("#minutes, #seconds").attr("disabled", "disabled");
     }
 
-    function enableInput() {
+    const enableInput = () => {
         $("#minutes, #seconds").removeAttr("disabled");
     }
 
-    function updateTime(time) {
+    const updateTime = (time) => {
         if (time.minutes.toString().length === 1) {
             $("#minutes").val("0" + time.minutes);
         } else
@@ -34,22 +34,30 @@ $(document).ready(function () {
             $("#seconds").val(time.seconds);
     }
 
-    function updateRing(colorClass) {
+    const updateRing = (colorClass) => {
         $(".ring").removeClass("ending ring-stroke").addClass(colorClass);
     }
 
-    function updateText(text) {
+    const updateText = (text) => {
         $(".start").text(text);
     }
 
-    $(".start").click(function (e) {
+    const checkTime = (time) => {
+        if (time.minutes > 99 || time.minutes < 0 || time.seconds > 60 || time.seconds < 0 || (time.minutes === 0 && time.seconds === 0 && clockRunning === false) || isNaN(time.minutes) || isNaN(time.seconds)) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    $(".start").click((e) => {
         e.preventDefault();
         memoryTime = {
             minutes: parseInt($("#minutes").val()),
             seconds: parseInt($("#seconds").val())
         }
 
-        if ((memoryTime.minutes <= 99 && memoryTime.seconds <= 60) && (memoryTime.minutes >= 0 && memoryTime.seconds >= 0)) {
+        if (checkTime(memoryTime)) {
             if (!clockRunning) {
                 userTime = JSON.parse(JSON.stringify(memoryTime))
                 clockRunning = true;
