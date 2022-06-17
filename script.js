@@ -59,7 +59,7 @@ $(document).ready(function () {
 
         if (checkTime(memoryTime)) {
             if (!clockRunning) {
-                userTime = JSON.parse(JSON.stringify(memoryTime))
+                userTime = {...memoryTime};
                 clockRunning = true;
                 disableInput();
                 updateRing("ring-stroke");
